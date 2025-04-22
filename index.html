@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmoAI - Распознавание эмоций</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <header class="main-header">
+        <nav>
+            <div class="logo-container">
+                <img src="image_2024-10-06_15-15-27.png" alt="Логотип школы" class="school-logo">
+                <div class="neural-animation">
+                    <svg class="neural-network" viewBox="0 0 200 100">
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#4F46E5" />
+                                <stop offset="100%" style="stop-color:#7C3AED" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Узлы нейронной сети -->
+                        <circle class="node n1" cx="40" cy="20" r="5" />
+                        <circle class="node n2" cx="100" cy="20" r="5" />
+                        <circle class="node n3" cx="160" cy="20" r="5" />
+                        <circle class="node n4" cx="70" cy="50" r="5" />
+                        <circle class="node n5" cx="130" cy="50" r="5" />
+                        <circle class="node n6" cx="100" cy="80" r="5" />
+                        
+                        <!-- Соединения -->
+                        <line class="connection c1" x1="40" y1="20" x2="70" y2="50" />
+                        <line class="connection c2" x1="100" y1="20" x2="70" y2="50" />
+                        <line class="connection c3" x1="100" y1="20" x2="130" y2="50" />
+                        <line class="connection c4" x1="160" y1="20" x2="130" y2="50" />
+                        <line class="connection c5" x1="70" y1="50" x2="100" y2="80" />
+                        <line class="connection c6" x1="130" y1="50" x2="100" y2="80" />
+                    </svg>
+                    <div class="ai-text">AI</div>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="#home" class="nav-link active"><i class="fas fa-home"></i> Главная</a>
+                <a href="#recognize" class="nav-link"><i class="fas fa-smile"></i> Распознавание</a>
+                <a href="#compare" class="nav-link"><i class="fas fa-users"></i> Сравнение</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Главная страница -->
+    <section id="home" class="page active">
+        <div class="hero">
+            <h1 class="hero-title">Распознавание эмоций с ИИ</h1>
+            <p class="hero-text">Современное решение для анализа эмоций и сравнения лиц с использованием искусственного интеллекта</p>
+            <div class="features">
+                <div class="feature-item">
+                    <i class="fas fa-brain feature-icon"></i>
+                    <h3>Умный анализ</h3>
+                    <p>Точное распознавание 7 базовых эмоций</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-bolt feature-icon"></i>
+                    <h3>Быстрая работа</h3>
+                    <p>Мгновенная обработка изображений</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt feature-icon"></i>
+                    <h3>Безопасность</h3>
+                    <p>Локальная обработка без отправки на сервер</p>
+                </div>
+            </div>
+            <div class="cta-buttons">
+                <button class="cta-button primary" onclick="showModal('about')">
+                    <i class="fas fa-info-circle"></i> О нас
+                </button>
+                <button class="cta-button secondary" onclick="showModal('contact')">
+                    <i class="fas fa-envelope"></i> Обратная связь
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Страница распознавания -->
+    <section id="recognize" class="page">
+        <div class="recognition-card">
+            <h2><i class="fas fa-smile-beam"></i> Распознавание эмоций</h2>
+            <div class="info-blocks">
+                <div class="info-block">
+                    <i class="fas fa-info-circle info-icon"></i>
+                    <h3>Как это работает?</h3>
+                    <p>Наша система использует современные алгоритмы искусственного интеллекта для анализа лиц и определения эмоций. Поддерживается распознавание 7 базовых эмоций: радость, грусть, злость, удивление, страх, отвращение и нейтральное выражение.</p>
+                </div>
+                <div class="info-block">
+                    <i class="fas fa-camera info-icon"></i>
+                    <h3>Требования к фото</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Хорошее освещение</li>
+                        <li><i class="fas fa-check-circle"></i> Лицо должно быть четко видно</li>
+                        <li><i class="fas fa-check-circle"></i> Поддерживаются форматы JPG и PNG</li>
+                        <li><i class="fas fa-check-circle"></i> Размер до 5 МБ</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="upload-box" id="uploadBox">
+                <input type="file" id="imageInput" accept="image/*" hidden>
+                <label for="imageInput" class="upload-button">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>Загрузить фото</span>
+                </label>
+                <p class="upload-hint">Перетащите фото сюда или нажмите для выбора</p>
+            </div>
+            
+            <div class="result-box hidden" id="resultBox">
+                <img id="previewImage" class="preview-image">
+                <div class="result-content">
+                    <div id="emotionResult" class="emotion-text"></div>
+                    <div id="emotionIcon" class="emotion-icon"></div>
+                </div>
+                <div class="emotion-details">
+                    <h4>Детали анализа:</h4>
+                    <ul id="emotionDetails">
+                        <li>Уверенность определения: <span id="confidenceLevel">-</span></li>
+                        <li>Время обработки: <span id="processingTime">-</span></li>
+                    </ul>
+                </div>
+                <button class="reset-button" onclick="location.reload()">
+                    <i class="fas fa-redo"></i> Попробовать снова
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Страница сравнения -->
+    <section id="compare" class="page">
+        <div class="compare-card">
+            <h2><i class="fas fa-users"></i> Сравнение лиц</h2>
+            <div class="compare-container">
+                <div class="compare-item">
+                    <div class="image-upload" id="compare1Upload">
+                        <input type="file" class="compare-input" accept="image/*">
+                        <i class="fas fa-user-circle upload-icon"></i>
+                        <span>Загрузить фото 1</span>
+                    </div>
+                    <img class="compare-preview" id="comparePreview1">
+                </div>
+                <div class="compare-item">
+                    <div class="image-upload" id="compare2Upload">
+                        <input type="file" class="compare-input" accept="image/*">
+                        <i class="fas fa-user-circle upload-icon"></i>
+                        <span>Загрузить фото 2</span>
+                    </div>
+                    <img class="compare-preview" id="comparePreview2">
+                </div>
+            </div>
+            <button class="compare-button" onclick="compareFaces()">
+                <i class="fas fa-equals"></i> Сравнить
+            </button>
+            <div class="similarity-result hidden" id="similarityResult">
+                Сходство: <span id="similarityValue" class="similarity-value">0%</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Модальное окно "О нас" -->
+    <div class="modal-overlay hidden" id="aboutModal">
+        <div class="modal">
+            <div class="modal-content">
+                <h3><i class="fas fa-graduation-cap"></i> О проекте</h3>
+                <div class="about-content">
+                    <div class="about-section">
+                        <h4>
+                            <div class="section-title">
+                                <div class="title-icon">
+                                    <svg class="dev-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M8 9l3 3-3 3"></path>
+                                        <path d="M16 9l-3 3 3 3"></path>
+                                        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                                    </svg>
+                                </div>
+                                Разработчики
+                            </div>
+                        </h4>
+                        <div class="developers-info">
+                            <p>Команда учеников ГБОУ Школа № 1357</p>
+                            <div class="dev-tooltip-trigger">
+                                <i class="fas fa-info-circle pulse-icon"></i>
+                                <span class="hover-hint">Нажмите, чтобы узнать больше</span>
+                                <div class="dev-tooltip">
+                                    <div class="dev-card-container">
+                                        <div class="dev-card">
+                                            <div class="dev-avatar">
+                                                <i class="fas fa-user-circle"></i>
+                                            </div>
+                                            <div class="dev-info">
+                                                <a href="https://vk.com/e21enyo1o" target="_blank" class="dev-name">
+                                                    Зулобиев Мунис
+                                                    <i class="fab fa-vk"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="dev-card">
+                                            <div class="dev-avatar">
+                                                <i class="fas fa-user-circle"></i>
+                                            </div>
+                                            <div class="dev-info">
+                                                <a href="https://vk.com/vonask777?from=search" target="_blank" class="dev-name">
+                                                    Передереев Михаил
+                                                    <i class="fab fa-vk"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="dev-class-info">
+                                            <i class="fas fa-graduation-cap"></i>
+                                            Ученики 10 "K" ИТ-класс в московской школе.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-section">
+                        <h4>
+                            <div class="section-title">
+                                <div class="title-icon">
+                                    <i class="fas fa-project-diagram"></i>
+                                </div>
+                                Проект
+                            </div>
+                        </h4>
+                        <p>Система распознавания эмоций и сравнения лиц Ai</p>
+                    </div>
+                    <div class="about-section">
+                        <h4>
+                            <div class="section-title">
+                                <div class="title-icon">
+                                    <i class="fas fa-award"></i>
+                                </div>
+                                Создан в рамках
+                            </div>
+                        </h4>
+                        <p>Научно-практическая конференция «Инженеры будущего» 2025.</p>
+                    </div>
+                    <div class="about-section">
+                        <h4><i class="fas fa-list-ul"></i> Возможности</h4>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Распознавание эмоций на фотографиях</li>
+                            <li><i class="fas fa-check"></i> Сравнение лиц и определение сходства</li>
+                            <li><i class="fas fa-check"></i> Мгновенная обработка без сервера</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <button class="modal-close" onclick="hideModal('about')">&times;</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно "Обратная связь" -->
+    <div class="modal-overlay hidden" id="contactModal">
+        <div class="modal">
+            <div class="modal-content">
+                <h3><i class="fas fa-envelope"></i> Обратная связь</h3>
+                <form id="feedbackForm">
+                    <div class="input-group">
+                        <label><i class="fas fa-at"></i> Ваш email:</label>
+                        <input type="email" name="email" placeholder="example@mail.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fas fa-comment"></i> Ваше сообщение:</label>
+                        <textarea name="message" placeholder="Напишите ваше сообщение..." rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-button">
+                        <i class="fas fa-paper-plane"></i> Отправить
+                    </button>
+                </form>
+                <div id="successMessage" class="success-message hidden">
+                    <span class="success-icon">✓</span>
+                    <p>Ваше сообщение успешно отправлено разработчикам!</p>
+                </div>
+            </div>
+            <button class="modal-close" onclick="hideModal('contact')">&times;</button>
+        </div>
+    </div>
+
+    <!-- Кнопка FAQ -->
+    <button class="faq-button" onclick="showModal('faq')" title="Часто задаваемые вопросы">
+        <i class="fas fa-question"></i>
+    </button>
+
+    <!-- Модальное окно FAQ -->
+    <div class="modal-overlay hidden" id="faqModal">
+        <div class="modal">
+            <div class="modal-content">
+                <h3><i class="fas fa-question-circle"></i> Часто задаваемые вопросы</h3>
+                <div class="faq-content">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-chevron-right"></i>
+                            Как работает распознавание эмоций?
+                        </div>
+                        <div class="faq-answer">
+                            Система использует сверточные нейронные сети для анализа лиц. Алгоритм обучен на большом наборе данных с размеченными эмоциями и может определять 7 базовых эмоциональных состояний. Обработка происходит локально в вашем браузере, без отправки фотографий на сервер.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-chevron-right"></i>
+                            Где можно использовать эту технологию?
+                        </div>
+                        <div class="faq-answer">
+                            Технология может применяться в различных сферах: для оценки реакции на рекламные материалы, в клиентском сервисе для анализа удовлетворенности клиентов, в исследованиях эмоционального отклика на контент, а также в образовательных и развлекательных целях.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-chevron-right"></i>
+                            Какие эмоции может распознать система?
+                        </div>
+                        <div class="faq-answer">
+                            Система распознает 7 базовых эмоций: радость, грусть, злость, удивление, страх, отвращение и нейтральное выражение. Каждая эмоция определяется с определенной степенью уверенности на основе анализа выражения лица.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-chevron-right"></i>
+                            Безопасно ли загружать свои фотографии?
+                        </div>
+                        <div class="faq-answer">
+                            Да, абсолютно безопасно. Вся обработка происходит локально в вашем браузере с использованием технологии TensorFlow.js. Фотографии не загружаются на сервер и не сохраняются где-либо еще.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-chevron-right"></i>
+                            Как получить наилучший результат при распознавании?
+                        </div>
+                        <div class="faq-answer">
+                            Для лучших результатов убедитесь, что: лицо хорошо освещено, находится в кадре полностью, нет сильных теней или бликов, фото четкое и не размытое. Рекомендуется использовать фронтальные фотографии с нейтральным фоном.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-chevron-right"></i>
+                            Как работает сравнение лиц?
+                        </div>
+                        <div class="faq-answer">
+                            При сравнении лиц система анализирует ключевые точки лица на обоих изображениях и вычисляет степень их сходства. Результат выражается в процентах, где 100% означает полное совпадение характеристик лиц.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="modal-close" onclick="hideModal('faq')">&times;</button>
+        </div>
+    </div>
+</body>
+</html>
